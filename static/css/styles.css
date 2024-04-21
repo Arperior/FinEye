@@ -161,7 +161,7 @@ body {
   }
   #home::before{
     content: "";
-    background: url('../img/bg-f.jpg');
+    background: url('../img/bg2.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -187,7 +187,7 @@ body {
 
 #prelog::before {
     content: "";
-    background: url('../img/bg2.jpg');
+    background: url('../img/bg3.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -199,6 +199,30 @@ body {
     z-index: -1;
     opacity: 0.5;
 }
+/*Post Login*/
+#post{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Set height to 100% of viewport height */
+}
+#postlog::before {
+  content: "";
+  background: url('../img/bg-in.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.5;
+}
+
 /*About Us*/
   #team{
     display: flex;

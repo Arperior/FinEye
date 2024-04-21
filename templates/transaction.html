@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% block content %}
+<section id="postlog">
 <div class="container">
     <h1>Transaction Entry</h1>
     <form action="/submit_t" method="post">
@@ -23,4 +24,5 @@
       <button type="submit">Submit</button>
     </form>
   </div>
+</section>
   {% endblock %}
