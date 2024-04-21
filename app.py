@@ -142,10 +142,9 @@ def gen_rep():
                 expense += amt
             else:
                 pass
-    query = "INSERT INTO report (total_expense,net_balance,date_of_report,user_id) VALUES (%s, %s, %s,%s)"
-    values = (expense, net_balance, today,user_id)
+    query = "INSERT INTO report (total_expense,net_balance,date_of_report,user_id,start_date,end_date) VALUES (%s, %s, %s,%s,%s,%s)"
+    values = (expense, net_balance, today,user_id,start,end)
     cursor.execute(query, values)
-    cursor.execute("Update user set balance = %s where user_id = %s",(net_balance,user_id,))
     db.commit()   
 
     return redirect('report_view')    
@@ -154,7 +153,7 @@ def gen_rep():
 def display_report():
     if 'username' in session:
         username = session['username']
-        cursor.execute("SELECT report_id,total_expense,net_balance,date_of_report FROM report")
+        cursor.execute("SELECT report_id,total_expense,net_balance,date_of_report,start_date,end_date FROM report")
         reports = cursor.fetchall()
 
         return render_template('report_view.html', reports=reports,username=username)
@@ -164,7 +163,6 @@ def display_report():
 @app.route('/view_tran')
 def view_t():
     if 'username' in session:
-        username = session['username']
         username = session['username']
         cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
         user_id = cursor.fetchone()[0]
@@ -181,6 +179,8 @@ def submit():
     username = session['username']
     cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
     user_id = cursor.fetchone()[0]
+    cursor.execute("select balance from user where user_id = %s",(user_id,))
+    balance = cursor.fetchone()[0]
 
     amount = request.form['amount']
     dot = request.form['dot']
@@ -188,9 +188,24 @@ def submit():
     query = "INSERT INTO transactions (amount, date_transaction, type,user_id) VALUES (%s, %s, %s,%s)"
     values = (amount, dot, type,user_id)
     cursor.execute(query, values)
+    net_balance = balance - amount
+    cursor.execute("Update user set balance = %s where user_id = %s",(net_balance,user_id,))
     db.commit()
 
     return redirect('/view_tran')
+
+@app.route('/show_balance',methods=['POST'])
+def view_balance():
+    if 'username' in session:
+        username = session['username']
+        cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+        user_id = cursor.fetchone()[0]
+
+        pressed = 1
+        cursor.execute("Select balance from user where user_id=%s",(user_id,))
+        balance = cursor.fetchone()[0]
+
+        return render_template('index.html',pressed=pressed,balance=balance,username=username)
 
 @app.route('/edit-existing_tran')
 def transaction_edit():
@@ -205,11 +220,17 @@ def edit_transaction():
     username = session['username']
     cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
     user_id = cursor.fetchone()[0]
+    cursor.execute("select balance from user where user_id = %s",(user_id,))
+    balance = cursor.fetchone()[0]
 
     amount = request.form['amount']
     tid = request.form['tid']
     type = request.form['type']
+
+    cursor.execute("Select amount from transactions where transaction_id = %s",(tid,))
+    current = cursor.fetchone()[0]
     cursor.execute("UPDATE transactions set amount=%s,type=%s where transaction_id=%s",(amount,type,tid,))
+    new_balance = balance + current - amount
     db.commit()
 
     return redirect('/view_tran')

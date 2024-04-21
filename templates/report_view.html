@@ -1,15 +1,30 @@
 {% extends "index.html" %}
 {% block content %}
 <h1>Reports</h1>
-        <div class="buttons">
+        <div class="button">
             <a href="/report_gen" class="btn">Create Report</a>
         </div>
-        <div class="report-preview">
-            <h2>Recent Reports</h2>
-            <ul>
-                {% for report in reports %}
-                <li>{{ report }}</li>
+        <div class="container">
+            <h1>Report Preview</h1>
+            <div class="report">
+                <div class="record">
+                    <div class="record-item">ID</div>
+                    <div class="record-item">Expense</div>
+                    <div class="record-item">Net Balance</div>
+                    <div class="record-item">Date of Report</div>
+                    <div class="record-item">Start</div>
+                    <div class="record-item">End</div>
+                </div>
+                {% for record in reports %}
+                <div class="record">
+                    <div class="record-item">{{ record[0] }}</div>
+                    <div class="record-item">{{ record[1] }}</div>
+                    <div class="record-item">{{ record[2] }}</div>
+                    <div class="record-item">{{ record[3] }}</div>
+                    <div class="record-item">{{ record[4] }}</div>
+                    <div class="record-item">{{ record[5] }}</div>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
 {% endblock %}

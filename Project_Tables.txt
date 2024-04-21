@@ -30,13 +30,11 @@
      net_balance float(10,2),
      date_of_report date not null,
      user_id int,
-     transaction_id int,
+     start_date date not null,
      foreign key (user_id) references user(user_id),
-     foreign key (transaction_id) references transactions(transaction_id)
+     end_date date not null
      );
 8-alter table user
      add column total_income int not null;
 9-alter table user
      add column balance int not null;
-10-alter table report drop constraint FK_transaction_id;
-11-alter table report drop column transaction_id;

@@ -19,26 +19,23 @@ body {
 .btn:hover {
   background-color: #0056b3;
 }
-.report-preview {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
+.report {
+  margin-top: 20px;
 }
 
-.report-preview h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #333;
+.record {
+  display: flex;
+  border-bottom: 1px solid #ddd;
 }
 
-.report-preview ul {
-  list-style-type: none;
-  padding: 0;
+.record-item {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
 }
 
-.report-preview li {
-  margin-bottom: 5px;
-  color: #666;
+.record-item:first-child {
+  border-right: 1px solid #ddd;
 }
   h1 {
     text-align: center;
