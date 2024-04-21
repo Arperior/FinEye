@@ -38,3 +38,12 @@
      add column total_income int not null;
 9-alter table user
      add column balance int not null;
+10-alter table transactions add column type varchar(255);
+11-create table reminder(
+     rem_id int primary key not null auto_increment,
+     user_id int not null,
+     type varchar(255),
+     amt_due int,
+     foreign key (user_id) references user(user_id),
+     Due_date date
+     );

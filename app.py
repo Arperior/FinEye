@@ -236,5 +236,51 @@ def edit_transaction():
 
     return redirect('/view_tran')
 
+@app.route('/set_reminder')
+def rem():
+    if 'username' in session:
+        username = session['username']
+        return render_template('set_reminder.html', username=username)
+    else:
+        return render_template('set_reminder.html')
+
+@app.route('/set_r',methods=['POST','GET'])
+def set_r():
+    username = session['username']
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+    user_id = cursor.fetchone()[0]
+
+    start_str = request.form['Start']
+    amount = request.form['amount']
+    type = request.form['type']
+    start = datetime.strptime(start_str,'%Y-%m-%d')
+
+    query = "INSERT INTO reminder (amt_due,due_date,user_id,type) VALUES (%s, %s, %s,%s)"
+    values = (amount,start,user_id,type)
+    cursor.execute(query, values)
+    db.commit() 
+
+    return redirect('/reminder')
+
+@app.route('/reminder')
+def reminder():
+    if 'username' in session:
+        username = session['username']
+        return render_template('reminder.html', username=username)
+    else:
+        return render_template('reminder.html')
+
+@app.route('/show_reminder',methods=['POST','GET'])
+def show_rem():
+    username = session['username']
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+    user_id = cursor.fetchone()[0]
+
+    pressed = 1
+    cursor.execute("SELECT amt_due,Due_date,type from reminder where user_id = %s",(user_id,))
+    reminders = cursor.fetchall()
+
+    return render_template('reminder.html',username=username,pressed=pressed,reminders=reminders)
+
 if __name__ == '__main__':
     app.run(debug=True)

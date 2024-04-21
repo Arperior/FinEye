@@ -4,10 +4,14 @@ body {
     margin: 0;
     padding: 0;
   }
+  .btn-container {
+    text-align: center;
+}
   .btn {
     display: inline-block;
     padding: 10px 20px;
-    margin: 0 10px;
+    margin: 0 20px;
+    margin-bottom: 20px;
     font-size: 16px;
     text-decoration: none;
     color: #fff;

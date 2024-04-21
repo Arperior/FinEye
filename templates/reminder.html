@@ -1,4 +1,27 @@
 {% extends "index.html" %}
 {% block content %}
-
+<section id="postlog">
+    <h1>Reminder</h1>
+    <div class="btn-container">
+        <a href="/set_reminder" class="btn">Create Mandate</a>
+    </div>
+    {% if pressed %}
+    <div class="record">
+        <div class="record-item">Amount</div>
+        <div class="record-item">Start Date</div>
+        <div class="record-item">Type</div>
+      </div>
+      {% for record in reminders %}
+      <div class="record">
+        <div class="record-item">{{ record[0] }}</div>
+        <div class="record-item">{{ record[1] }}</div>
+        <div class="record-item">{{ record[2] }}</div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="btn-container">
+        <a href="/show_reminder" class="btn">Check Your Mandates</a>
+    </div>
+      {% endif %}
+</section>
 {% endblock %}
