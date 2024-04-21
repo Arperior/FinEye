@@ -233,7 +233,7 @@ def edit_transaction():
     cursor.execute("Select amount from transactions where transaction_id = %s",(tid,))
     current = cursor.fetchone()[0]
     cursor.execute("UPDATE transactions set amount=%s,type=%s where transaction_id=%s",(amount,type,tid,))
-    new_balance = balance + current - amount
+    new_balance = int(balance) + int(current) - int(amount)
     db.commit()
 
     return redirect('/view_tran')
