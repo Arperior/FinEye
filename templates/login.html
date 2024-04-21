@@ -1,14 +1,16 @@
 {% extends "index.html" %}
 {% block content %}
-<div class="container">
-    <h1>Welcome Back</h1>
-    <form action="/login" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Login">
-    </form>
-    <a href="/signup" class="button">Sign Up</a>
+<section id="prelog">
+    <div class="container">
+        <h1>Welcome Back</h1>
+        <form action="/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="submit" value="Login">
+        </form>
+        <a href="/signup" class="button">Sign Up</a>
 </div>
+</section>
 {% endblock %}
