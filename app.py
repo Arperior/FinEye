@@ -105,14 +105,14 @@ def view_t():
         cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
         user_id = cursor.fetchone()[0]
 
-        cursor.execute("SELECT * FROM transactions WHERE user_id = %s", (user_id,))
+        cursor.execute("SELECT transaction_id,amount,date_transaction,type FROM transactions WHERE user_id = %s", (user_id,))
         transactions = cursor.fetchall()
 
         return render_template('view_tran.html', username=username,transactions=transactions)
     else:
         return redirect('/login')
 
-@app.route('/submit', methods=['POST','GET'])
+@app.route('/submit_t', methods=['POST','GET'])
 def submit():
     username = session['username']
     cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
@@ -126,7 +126,28 @@ def submit():
     cursor.execute(query, values)
     db.commit()
 
-    return redirect('/transaction')
+    return redirect('/view_tran')
 
+@app.route('/edit-existing_tran')
+def transaction_edit():
+    if 'username' in session:
+        username = session['username']
+        return render_template('edit-existing_tran.html', username=username)
+    else:
+        return render_template('edit-existing_tran.html')
+
+@app.route('/update_t', methods=['Post','Get'])
+def edit_transaction():
+    username = session['username']
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+    user_id = cursor.fetchone()[0]
+
+    amount = request.form['amount']
+    tid = request.form['tid']
+    type = request.form['type']
+    cursor.execute("UPDATE transactions set amount=%s,type=%s where transaction_id=%s",(amount,type,tid,))
+    db.commit()
+
+    return redirect('/view_tran')
 if __name__ == '__main__':
     app.run(debug=True)
