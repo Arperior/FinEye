@@ -40,11 +40,19 @@ def logout():
 
 @app.route('/aboutus')
 def aboutus():
-    return render_template('about.html')
+    if 'username' in session:
+        username = session['username']
+        return render_template('about.html', username=username)
+    else:
+        return render_template('about.html')
 
 @app.route('/transaction')
 def transaction():
-    return render_template('transaction.html')
+    if 'username' in session:
+        username = session['username']
+        return render_template('transaction.html', username=username)
+    else:
+        return render_template('transaction.html')
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -91,17 +99,18 @@ def incorrect():
 
 @app.route('/view_tran')
 def view_t():
-    if 'username' not in session:
+    if 'username' in session:
+        username = session['username']
+        username = session['username']
+        cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+        user_id = cursor.fetchone()[0]
+
+        cursor.execute("SELECT * FROM transactions WHERE user_id = %s", (user_id,))
+        transactions = cursor.fetchall()
+
+        return render_template('view_tran.html', username=username,transactions=transactions)
+    else:
         return redirect('/login')
-    
-    username = session['username']
-    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
-    user_id = cursor.fetchone()[0]
-
-    cursor.execute("SELECT * FROM transactions WHERE user_id = %s", (user_id,))
-    transactions = cursor.fetchall()
-
-    return render_template('view_tran.html', transactions=transactions)
 
 @app.route('/submit', methods=['POST','GET'])
 def submit():
