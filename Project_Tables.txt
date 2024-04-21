@@ -1,0 +1,39 @@
+1-create database project;
+2-use project;
+3-create table User(
+    -> user_id int primary key auto_increment,
+    -> username varchar(255) not null,
+    -> email varchar(255) not null,
+    -> password varchar(255) not null
+    -> );
+4-create table Transactions(
+    -> transaction_id int primary key auto_increment,
+    -> amount float(10,2) not null,
+    -> date_transaction date not null,
+    -> user_id int,
+    -> foreign key (user_id) references User(user_id)
+    -> );
+5-create table currency(
+    -> currency_id int primary key auto_increment,
+    -> code varchar(3) not null,
+    -> name varchar(50) not null,
+    -> exchange_rate float(10,4) not null,
+    -> country varchar(20)
+    -> );
+6-alter table transactions
+    -> add column currency_id int,
+    -> add foreign key (currency_id) references Currency(currency_id)
+    -> ;
+7-create table report(
+    -> report_id int primary key auto_increment,
+    -> total_expense float(10,2),
+    -> net_balance float(10,2),
+    -> date_of_report date not null,
+    -> user_id int,
+    -> transaction_id int,
+    -> foreign key (user_id) references user(user_id),
+    -> foreign key (transaction_id) references transactions(transaction_id)
+    -> );
+8-alter table user
+    -> add column total_income int not null;
+9-
