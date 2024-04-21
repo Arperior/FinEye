@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 8px;
+  }
+  
+  input {
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  /*Navigation bar*/
+  #navbar{
+    display: flex;
+    align-items: center;
+  }
+  #navbar::before {
+    content: "";
+    background-color: black;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.5;
+  }
+  #logo {
+    margin: 10px 10px;
+  }
+  #logo img{
+    height: 60px;
+    margin: 1px 4px;
+  }
+  #navbar{
+    position: relative;
+  }
+  #navbar ul {
+    display: flex;
+  }
+  #navbar ul li {
+    list-style: none;
+    font-size: 1.3rem;
+  }
+  #navbar ul li a, .dropbtn {
+    color: white;
+    display: block;
+    padding:  2px 25px;
+    border-radius: 20px;
+    text-decoration: none;
+  }
+  #navbar ul li a:hover, .dropdown:hover .dropbtn{
+    color: black;
+    background-color: white;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #555;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+  /*Home*/
+  #home{
+    display: flex;
+    flex-direction: column;
+    padding: 3px 20px;
+    height: 500px;
+    justify-content: center;
+    align-items: center;
+  }
+  #home::before{
+    content: "";
+    background: url('../img/bg-f.jpg') no-repeat center center/cover;
+    /*background-size: cover;*/
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.5;
+  }
+  /*About Us*/
+  #team{
+    display: flex;
+    flex-direction: column;
+    padding: 3px 20px;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+  }
+  #team ::before{
+    content: "";
+    /*background: url('../img/bg-f.jpg') no-repeat center center/cover;*/ /*Add Later*/
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 1;
+  }

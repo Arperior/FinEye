@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinEye : Financial Reporter | FinEye.com</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css')}}" />
+</head>
+<body>
+<nav id="navbar">
+  <div id="logo">
+      <img src="../img/lo`````````go.png" alt="FinEye.com">
+  </div>
+  <ul>
+      <li class="item"><a href="/">Home</a></li>
+            {% if username %}
+            <li><a href="/logout">Logout</a></li>
+            <li class="item dropdown">
+              <a href="/transaction" class="dropbtn">Transactions</a>
+              <div class="dropdown-content">
+                  <a href="/transaction">Enter New</a>
+                  <a href="/edit-existing_tran">Edit Existing</a>
+                  <a href="/view_tran">View All</a>
+              </div>
+          </li>
+          <li class="item dropdown">
+              <a href="/reports" class="dropbtn">Reports</a>
+              <div class="dropdown-content">
+                  <a href="/report/generate-new">Generate New</a>
+                  <a href="/report/view-old">View Old</a>
+              </div>
+          </li>
+          <li class="item"><a href="/reminder">Injunctions</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Signup</a></li>
+            {% endif %}
+      <li class="item"><a href="/currency">Currency Explorer</a></li>
+      <li class="item"><a href="/aboutus">About Us</a></li>
+  </ul>
+</nav>
+  {% block content %}
+  <section id="home">
+    <h1 class="h-primary"> Welcome to your Personal Financial Caretaker </h1>
+    {% if username %}
+    <p>Welcome to FinEye {{ username }}!</p>
+    <p>Update your Deets!</p>
+    {% else %}
+    <p> Your one stop solution to all your budgetery needs !</p>
+    <a href="/login" class="button">Get Started</a>
+    {% endif %}
+  </section>
+  {% endblock %}
+</body>
+</html>
