@@ -181,6 +181,8 @@ def submit():
     user_id = cursor.fetchone()[0]
     cursor.execute("select balance from user where user_id = %s",(user_id,))
     balance = cursor.fetchone()[0]
+    balance = int(balance)
+
 
     amount = request.form['amount']
     dot = request.form['dot']
@@ -188,7 +190,7 @@ def submit():
     query = "INSERT INTO transactions (amount, date_transaction, type,user_id) VALUES (%s, %s, %s,%s)"
     values = (amount, dot, type,user_id)
     cursor.execute(query, values)
-    net_balance = balance - amount
+    net_balance = balance - int(amount)
     cursor.execute("Update user set balance = %s where user_id = %s",(net_balance,user_id,))
     db.commit()
 
@@ -222,6 +224,7 @@ def edit_transaction():
     user_id = cursor.fetchone()[0]
     cursor.execute("select balance from user where user_id = %s",(user_id,))
     balance = cursor.fetchone()[0]
+    balance = int(balance)
 
     amount = request.form['amount']
     tid = request.form['tid']
