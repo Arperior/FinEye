@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect,session
 import mysql.connector
 from datetime import date,datetime
+import requests
 
 app = Flask(__name__)
 app.secret_key ='aaaaa'
@@ -17,6 +18,7 @@ def get_users():
     cursor.execute("SELECT username FROM user")
     users = [user[0] for user in cursor.fetchall()]
     return users
+
 def authenticate_user(username, password):  
     cursor.execute("SELECT * FROM user WHERE username = %s AND password = %s", (username, password))
     user = cursor.fetchone()
@@ -25,6 +27,37 @@ def authenticate_user(username, password):
         return True
     else:
         return False
+    
+def fetch_and_store_exchange_rates():
+    url = "https://v6.exchangerate-api.com/v6/77628be702d498deaeecfe41/latest/INR"  
+    response = requests.get(url)
+    data = response.json()
+    exchange_rates = data['conversion_rates']
+    today = date.today().strftime('%Y-%m-%d')
+    cursor = db.cursor()
+
+    for currency, rate in exchange_rates.items():
+        query = "INSERT INTO currency (base_currency, target_currency, exchange_rate,DATE) VALUES (%s, %s, %s,%s)"
+        values = ("INR", currency, rate,today)
+        cursor.execute(query, values)
+
+    db.commit()
+    cursor.close()
+
+def exchange_rates_exist():
+    cursor = db.cursor()
+    today = date.today().strftime('%Y-%m-%d')
+    cursor.execute("SELECT COUNT(*) FROM currency WHERE DATE = %s", (today,))
+    count = cursor.fetchone()[0]
+    cursor.close()
+    return count > 0
+
+def get_exchange_rates():
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM currency")
+    rates = cursor.fetchall()
+    cursor.close()
+    return rates
 
 @app.route('/')
 def index():
@@ -282,5 +315,32 @@ def show_rem():
 
     return render_template('reminder.html',username=username,pressed=pressed,reminders=reminders)
 
+@app.route('/currency')
+def currency_display():
+    if 'username' in session:
+        username = session['username']
+        return render_template('currency.html', username=username)
+    else:
+        return render_template('currency.html')
+
+@app.route('/get_rates',methods=['POST','GET'])
+def get():
+    if 'username' in session:
+        username = session['username']
+        if not exchange_rates_exist():
+            fetch_and_store_exchange_rates()  
+        rates = get_exchange_rates()         
+        return render_template('currency.html', exchange_rates=rates,username=username)
+    else:
+        return render_template('currency.html',exchange_rates=rates)
+    
+@app.route('/calc_exchange')
+def calc():
+    if 'username' in session:
+        username = session['username']
+        return render_template('calc_exchange.html',username=username)
+    else:
+        return render_template('calc_exchange.html')
+    
 if __name__ == '__main__':
     app.run(debug=True)

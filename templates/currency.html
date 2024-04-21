@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% block content %}
+<section id="postlog">
+<h1>Welcome To The Currency Center</h1>
+<table class="transactions-table">
+    <thead>
+        <tr>
+            <th>C_ID</th>
+            <th>Exchange Rate</th>
+            <th>Base ISO</th>
+            <th>Target ISO</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in exchange_rates %}
+        <tr>
+            <td>{{ record[0] }}</td> 
+            <td>{{ record[1] }}</td> 
+            <td>{{ record[2] }}</td> 
+            <td>{{ record[3] }}</td> 
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="btn-container">
+    <a href="/get_rates" class="btn">Fetch Newer Rates</a>
+</div>
+</section>
+{% endblock %}

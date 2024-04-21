@@ -15,10 +15,9 @@
     );
 5-create table currency(
     currency_id int primary key auto_increment,
-    code varchar(3) not null,
-     name varchar(50) not null,
+    base_currency varchar(5)
+     target_currency varchar(5)
      exchange_rate float(10,4) not null,
-     country varchar(20)
      );
 6-alter table transactions
      add column currency_id int,
