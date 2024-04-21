@@ -3,7 +3,7 @@ import mysql.connector
 
 app = Flask(__name__)
 app.secret_key ='aaaaa'
-# MySQL configuration
+# MySQL configuration   #Sabka Apna Apna Password Daalna 
 db = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -115,7 +115,7 @@ def view_t():
 @app.route('/submit', methods=['POST','GET'])
 def submit():
     username = session['username']
-    cursor.execute("SELECT id FROM user WHERE username = %s", (username,))
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
     user_id = cursor.fetchone()[0]
 
     amount = request.form['amount']
