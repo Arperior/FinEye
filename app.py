@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect,session
 import mysql.connector
+from datetime import date,datetime
 
 app = Flask(__name__)
 app.secret_key ='aaaaa'
@@ -74,7 +75,8 @@ def signup():
         email = request.form['email']
         password = request.form['password']
         income = request.form['income']
-        
+        balance = income
+
         cursor.execute("SELECT * FROM user WHERE username = %s", (username,))
         existing_username = cursor.fetchone()
         if existing_username:
@@ -85,7 +87,7 @@ def signup():
         if existing_email:
             return 'Email already exists. Please use a different email.'
         
-        cursor.execute("INSERT INTO user (username, email, password,total_income) VALUES (%s, %s, %s,%s)", (username, email, password,income))
+        cursor.execute("INSERT INTO user (username, email, password,total_income,balance) VALUES (%s, %s, %s,%s,%s)", (username, email, password,income,balance))
         db.commit()
         
         session['username'] = username
@@ -97,6 +99,68 @@ def signup():
 def incorrect():
     render_template('failed.html')
 
+@app.route('/report_gen')
+def report_gen():
+    if 'username' in session:
+        username = session['username']
+
+        return render_template('report_gen.html', username=username)
+    else:
+        return render_template('report_gen.html')
+
+@app.route('/gen_rep',methods=['POST','GET'])
+def gen_rep():
+    username = session['username']
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+    user_id = cursor.fetchone()[0]
+    cursor.execute("select balance from user where user_id = %s",(user_id,))
+    balance = cursor.fetchone()[0]
+
+    start_str = request.form['Start']
+    end_str = request.form['End']
+    type = request.form['type']
+    today = date.today()
+    end = datetime.strptime(end_str, '%Y-%m-%d')
+    start = datetime.strptime(start_str, '%Y-%m-%d')
+    net_balance = balance
+    expense = 0
+
+    if type == 'All':
+        cursor.execute("""
+    SELECT t.amount, t.date_transaction
+    FROM transactions t
+    JOIN user u ON t.user_id = u.user_id
+    WHERE u.user_id = %s
+""", (user_id,))
+        data= cursor.fetchall()
+        for row in data:
+            amt, dot = row
+            dot_datetime = datetime.combine(dot, datetime.min.time())
+
+            if start <= dot_datetime <= end:
+                net_balance -= amt
+                expense += amt
+            else:
+                pass
+    query = "INSERT INTO report (total_expense,net_balance,date_of_report,user_id) VALUES (%s, %s, %s,%s)"
+    values = (expense, net_balance, today,user_id)
+    cursor.execute(query, values)
+    cursor.execute("Update user set balance = %s where user_id = %s",(net_balance,user_id,))
+    db.commit()   
+
+    return redirect('report_view')    
+
+@app.route('/report_view',methods=['POST','GET'])
+def display_report():
+    if 'username' in session:
+        username = session['username']
+        cursor.execute("SELECT report_id,total_expense,net_balance,date_of_report FROM report")
+        reports = cursor.fetchall()
+
+        return render_template('report_view.html', reports=reports,username=username)
+    else:
+        return redirect('login.html')
+    
 @app.route('/view_tran')
 def view_t():
     if 'username' in session:
@@ -149,5 +213,6 @@ def edit_transaction():
     db.commit()
 
     return redirect('/view_tran')
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,32 +9,28 @@
 <body>
 <nav id="navbar">
   <div id="logo">
-      <img src="../img/logo.png" alt="FinEye.com">
+      <img src="static\img\logo.png" alt="FinEye.com">
   </div>
   <ul>
       <li class="item"><a href="/">Home</a></li>
             {% if username %}
             <li><a href="/logout">Logout</a></li>
             <li class="item dropdown">
-              <a href="/transaction" class="dropbtn">Transactions</a>
+              <a href="/view_tran" class="dropbtn">Transactions</a>
               <div class="dropdown-content">
                   <a href="/transaction">Enter New</a>
                   <a href="/edit-existing_tran">Edit Existing</a>
                   <a href="/view_tran">View All</a>
               </div>
           </li>
-          <li class="item dropdown">
-              <a href="/reports" class="dropbtn">Reports</a>
-              <div class="dropdown-content">
-                  <a href="/report/generate-new">Generate New</a>
-                  <a href="/report/view-old">View Old</a>
-              </div>
+          <li class="item">
+              <a href="/report_view" class="dropbtn">Reports</a>
           </li>
           <li class="item dropdown">
             <a href="/budget" class="dropbtn">Budgets</a>
             <div class="dropdown-content">
-                <a href="/report/create-new">New Budegt</a>
-                <a href="/report/view-bud">View Existing</a>
+                <a href="/budget/create_new">New Budegt</a>
+                <a href="/budget/view-bud">View Existing</a>
             </div>
         </li>
           <li class="item"><a href="/insight">Insights</a></li>

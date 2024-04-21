@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>Reports</h1>
+        <div class="buttons">
+            <a href="/report_gen" class="btn">Create Report</a>
+        </div>
+        <div class="report-preview">
+            <h2>Recent Reports</h2>
+            <ul>
+                {% for report in reports %}
+                <li>{{ report }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+{% endblock %}

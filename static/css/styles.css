@@ -4,7 +4,52 @@ body {
     margin: 0;
     padding: 0;
   }
-  
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
+.report-preview {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.report-preview h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.report-preview ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.report-preview li {
+  margin-bottom: 5px;
+  color: #666;
+}
+  h1 {
+    text-align: center;
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
   .container {
     max-width: 600px;
     margin: 50px auto;
@@ -25,7 +70,7 @@ body {
   
   input {
     padding: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
@@ -43,7 +88,7 @@ body {
   button:hover {
     background-color: #0056b3;
   }
-  /*Navigation bar*/
+/*Navigation bar*/
   #navbar{
     display: flex;
     align-items: center;
@@ -108,7 +153,7 @@ body {
 .dropdown:hover .dropdown-content {
     display: block;
 }
-  /*Home*/
+/*Home*/
   #home{
     display: flex;
     flex-direction: column;
@@ -127,7 +172,7 @@ body {
     z-index: -1;
     opacity: 0.5;
   }
-  /*About Us*/
+/*About Us*/
   #team{
     display: flex;
     flex-direction: column;
@@ -136,6 +181,36 @@ body {
     justify-content: center;
     align-items: center;
   }
+#team h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#team p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+#about {
+  background-color: #e6f7ff;
+  padding: 50px 0;
+  text-align: center;
+}
+
+#about h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #333;
+  text-transform: uppercase;
+}
+#about p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #666;
+  line-height: 1.6;
+}
   #team ::before{
     content: "";
     /*background: url('../img/bg-f.jpg') no-repeat center center/cover;*/ /*Add Later*/
@@ -145,3 +220,28 @@ body {
     z-index: -1;
     opacity: 1;
   }
+/*Transaction Table*/
+table.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table.transactions-table th, .transactions-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table.transactions-table th {
+  background-color: #007bff;
+  color: #fff;
+}
+
+table.transactions-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.transactions-table tbody tr:hover {
+  background-color: #ddd;
+}

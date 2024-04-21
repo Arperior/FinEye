@@ -36,4 +36,7 @@
      );
 8-alter table user
      add column total_income int not null;
-9-
+9-alter table user
+     add column balance int not null;
+10-alter table report drop constraint FK_transaction_id;
+11-alter table report drop column transaction_id;
