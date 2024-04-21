@@ -178,6 +178,16 @@ body {
     justify-content: center;
     align-items: center;
   }
+  #team::before{
+    content: "";
+    background: url('../img/bg-about.png') no-repeat center center/cover;
+    /*background-size: cover;*/
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.5;
+  }
 #team h1 {
   font-size: 36px;
   margin-bottom: 20px;
@@ -189,12 +199,12 @@ body {
   margin-bottom: 10px;
   color: #666;
 }
-
+/*
 #about {
   background-color: #e6f7ff;
   padding: 50px 0;
   text-align: center;
-}
+}*/
 
 #about h2 {
   font-size: 32px;
@@ -202,21 +212,7 @@ body {
   color: #333;
   text-transform: uppercase;
 }
-#about p {
-  font-size: 16px;
-  margin-bottom: 20px;
-  color: #666;
-  line-height: 1.6;
-}
-  #team ::before{
-    content: "";
-    /*background: url('../img/bg-f.jpg') no-repeat center center/cover;*/ /*Add Later*/
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    opacity: 1;
-  }
+
 /*Transaction Table*/
 table.transactions-table {
   width: 100%;
