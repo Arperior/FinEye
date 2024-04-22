@@ -165,8 +165,17 @@ def gen_rep():
     JOIN user u ON t.user_id = u.user_id
     WHERE u.user_id = %s
 """, (user_id,))
-        data= cursor.fetchall()
-        for row in data:
+        
+    else:
+         cursor.execute("""
+    SELECT t.amount, t.date_transaction
+    FROM transactions t
+    JOIN user u ON t.user_id = u.user_id
+    WHERE u.user_id = %s , t.type=%s
+""", (user_id,type,))  
+         
+    data= cursor.fetchall()
+    for row in data:
             amt, dot = row
             dot_datetime = datetime.combine(dot, datetime.min.time())
 
@@ -174,9 +183,10 @@ def gen_rep():
                 net_balance -= amt
                 expense += amt
             else:
-                pass
-    query = "INSERT INTO report (total_expense,net_balance,date_of_report,user_id,start_date,end_date) VALUES (%s, %s, %s,%s,%s,%s)"
-    values = (expense, net_balance, today,user_id,start,end)
+                pass       
+
+    query = "INSERT INTO report (total_expense,net_balance,date_of_report,user_id,start_date,end_date,type) VALUES (%s, %s, %s,%s,%s,%s,%s)"
+    values = (expense, net_balance, today,user_id,start,end,type)
     cursor.execute(query, values)
     db.commit()   
 
@@ -186,7 +196,7 @@ def gen_rep():
 def display_report():
     if 'username' in session:
         username = session['username']
-        cursor.execute("SELECT report_id,total_expense,net_balance,date_of_report,start_date,end_date FROM report")
+        cursor.execute("SELECT report_id,total_expense,net_balance,date_of_report,start_date,end_date,type FROM report")
         reports = cursor.fetchall()
 
         return render_template('report_view.html', reports=reports,username=username)
@@ -335,12 +345,12 @@ def get():
         return render_template('currency.html',exchange_rates=rates)
     
 @app.route('/calc_exchange')
-def calc():
+def calc_exchange():
     if 'username' in session:
         username = session['username']
         return render_template('calc_exchange.html',username=username)
     else:
         return render_template('calc_exchange.html')
-    
+
 if __name__ == '__main__':
     app.run(debug=True)

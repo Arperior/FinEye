@@ -46,3 +46,4 @@
      foreign key (user_id) references user(user_id),
      Due_date date
      );
+12-alter table report add column type varchar(25);

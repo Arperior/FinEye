@@ -15,6 +15,7 @@
                     <div class="record-item">Date of Report</div>
                     <div class="record-item">Start</div>
                     <div class="record-item">End</div>
+                    <div class="record-item">Type</div>
                 </div>
                 {% for record in reports %}
                 <div class="record">
@@ -24,6 +25,7 @@
                     <div class="record-item">{{ record[3] }}</div>
                     <div class="record-item">{{ record[4] }}</div>
                     <div class="record-item">{{ record[5] }}</div>
+                    <div class="record-item">{{ record[6] }}</div>
                 </div>
                 {% endfor %}
             </div>
