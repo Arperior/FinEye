@@ -442,6 +442,7 @@ def page_bal_update():
         return render_template('update_balance.html', username=username)
     else:
         return render_template('information.html')
+    
 @app.route('/update_bal',methods=['POST','GET'])
 def inc_balance():
     if 'username' in session:
@@ -461,5 +462,6 @@ def inc_balance():
         return render_template('information.html', username=username,information=information)
     else:
         return render_template('information.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
