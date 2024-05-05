@@ -278,6 +278,7 @@ def edit_transaction():
     current = cursor.fetchone()[0]
     cursor.execute("UPDATE transactions set amount=%s,type=%s where transaction_id=%s",(amount,type,tid,))
     new_balance = int(balance) + int(current) - int(amount)
+    cursor.execute("Update user set balance = %s where user_id = %s",(new_balance,user_id,))
     db.commit()
 
     return redirect('/view_tran')
@@ -368,10 +369,14 @@ def calc_exchange():
             base_currency = request.form['base_currency']  
             target_currency = request.form['target_currency']  
 
-            cursor.execute("SELECT exchange_rate FROM currency WHERE base_currency = %s AND target_currency = %s", (base_currency, target_currency))
+            cursor.execute("SELECT exchange_rate FROM currency WHERE target_currency = %s", (base_currency,))
+            exchange_rate1 = cursor.fetchone()[0]
+            middle_inr = amount/exchange_rate1
+
+            cursor.execute("SELECT exchange_rate FROM currency WHERE target_currency = %s", (target_currency,))
             exchange_rate = cursor.fetchone()[0]
 
-            converted_amount = amount * exchange_rate
+            converted_amount = middle_inr * exchange_rate
 
             return render_template('calculated.html', username=username, amount=amount, base_currency=base_currency, target_currency=target_currency, converted_amount=converted_amount)
     else:
@@ -416,5 +421,45 @@ def exchange_tran():
     else:
         return render_template('calc_exchange.html')
 
+@app.route('/information',methods=['POST','GET'])
+def info():
+    if 'username' in session:
+        username = session['username']
+        cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+        user_id = cursor.fetchone()[0]
+
+        cursor.execute("SELECT user_id,username,email,total_income,balance from user where user_id=%s",(user_id,))
+        information = cursor.fetchone()
+
+        return render_template('information.html', username=username,information=information)
+    else:
+        return render_template('information.html')
+    
+@app.route('/update_balance')
+def page_bal_update():
+    if 'username' in session:
+        username = session['username']
+        return render_template('update_balance.html', username=username)
+    else:
+        return render_template('information.html')
+@app.route('/update_bal',methods=['POST','GET'])
+def inc_balance():
+    if 'username' in session:
+        username = session['username']
+        cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+        user_id = cursor.fetchone()[0]
+
+        cursor.execute("select balance from user where user_id = %s",(user_id,))
+        balance = cursor.fetchone()[0]
+        amount = request.form['amount']
+        new_balance = int(balance) + int(amount) 
+        cursor.execute("Update user set balance = %s where user_id = %s",(new_balance,user_id,))
+
+        cursor.execute("SELECT user_id,username,email,total_income,balance from user where user_id=%s",(user_id,))
+        information = cursor.fetchone()
+        db.commit()
+        return render_template('information.html', username=username,information=information)
+    else:
+        return render_template('information.html')
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<section id ='home'>
+    <h2>-- Here are your details --</h2>
+    <div class="conversion-details">
+        {% if information %}
+        <p><strong>User_ID:</strong> {{ information[0] }}</p>
+        <p><strong>Username:</strong> {{ information[1] }}</p>
+        <p><strong>Email:</strong> {{ information[2] }}</p>
+        <p><strong>Earnings:</strong> {{ information[3] }}</p>
+        <p><strong>Balance Amount:</strong> {{ information[4] }}</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
