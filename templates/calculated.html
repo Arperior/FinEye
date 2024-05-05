@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<section id ='home'>
+    <h2>-- Here is your converted amount --</h2>
+    <div class="conversion-details">
+        <p><strong>Amount:</strong> {{ amount }}</p>
+        <p><strong>Base Currency:</strong> {{ base_currency }}</p>
+        <p><strong>Target Currency:</strong> {{ target_currency }}</p>
+        <p><strong>Converted Amount:</strong> {{ converted_amount }}</p>
+    </div>
+    <div class="btn-container">
+        <a href="/get_rates" class="btn">Fetch Newer Rates</a>
+    </div>
+</section>
+{% endblock %}

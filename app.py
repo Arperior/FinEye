@@ -35,6 +35,9 @@ def fetch_and_store_exchange_rates():
     exchange_rates = data['conversion_rates']
     today = date.today().strftime('%Y-%m-%d')
     cursor = db.cursor()
+    
+    cursor.execute('Delete from currency')
+    cursor.execute('alter table currency AUTO_INCREMENT=1')
 
     for currency, rate in exchange_rates.items():
         query = "INSERT INTO currency (base_currency, target_currency, exchange_rate,DATE) VALUES (%s, %s, %s,%s)"
@@ -130,7 +133,7 @@ def signup():
 
 @app.route('/failed')
 def incorrect():
-    render_template('failed.html')
+    return render_template('failed.html')
 
 @app.route('/report_gen')
 def report_gen():
@@ -229,8 +232,8 @@ def submit():
     amount = request.form['amount']
     dot = request.form['dot']
     type = request.form['type']
-    query = "INSERT INTO transactions (amount, date_transaction, type,user_id) VALUES (%s, %s, %s,%s)"
-    values = (amount, dot, type,user_id)
+    query = "INSERT INTO transactions (amount, date_transaction, type,user_id,currency_id) VALUES (%s, %s, %s,%s,%s)"
+    values = (amount, dot, type,user_id,1)
     cursor.execute(query, values)
     net_balance = balance - int(amount)
     cursor.execute("Update user set balance = %s where user_id = %s",(net_balance,user_id,))
@@ -344,11 +347,72 @@ def get():
     else:
         return render_template('currency.html',exchange_rates=rates)
     
-@app.route('/calc_exchange')
+@app.route('/calc_exchange',methods=['POST','GET'])
+def page_exchange():
+    if 'username' in session:
+        username = session['username']
+
+        cursor.execute("SELECT target_currency FROM currency")
+        currencies = cursor.fetchall()
+
+        return render_template('calc_exchange.html', username=username,currencies=currencies)
+    else:
+        return render_template('calc_exchange.html')
+
+@app.route('/exchange',methods=['POST','GET'])
 def calc_exchange():
     if 'username' in session:
         username = session['username']
-        return render_template('calc_exchange.html',username=username)
+        if request.method == 'POST':
+            amount = float(request.form['amount'])  
+            base_currency = request.form['base_currency']  
+            target_currency = request.form['target_currency']  
+
+            cursor.execute("SELECT exchange_rate FROM currency WHERE base_currency = %s AND target_currency = %s", (base_currency, target_currency))
+            exchange_rate = cursor.fetchone()[0]
+
+            converted_amount = amount * exchange_rate
+
+            return render_template('calculated.html', username=username, amount=amount, base_currency=base_currency, target_currency=target_currency, converted_amount=converted_amount)
+    else:
+        return render_template('calc_exchange.html')
+
+@app.route('/transaction_convert',methods=['POST','GET'])
+def t_convert_page():
+    if 'username' in session:
+        username = session['username']
+
+        cursor.execute("SELECT target_currency FROM currency")
+        currencies = cursor.fetchall()
+
+        return render_template('transaction_convert.html', username=username,currencies=currencies)
+    else:
+        return render_template('calc_exchange.html')
+
+@app.route('/exchange_trans',methods=['POST','GET'])
+def exchange_tran():
+    if 'username' in session:
+        username = session['username']
+    if request.method == 'POST':
+            tid = float(request.form['tid'])  
+            base_currency = 'INR'
+            target_currency = request.form['target_currency']  
+
+            cursor.execute("SELECT COUNT(*) FROM transactions WHERE transaction_id = %s", (tid,))
+            transaction_exists = cursor.fetchone()[0]
+
+            if transaction_exists:
+                cursor.execute("SELECT amount FROM transactions WHERE transaction_id = %s", (tid,))
+                amount = cursor.fetchone()[0]
+
+                cursor.execute("SELECT exchange_rate FROM currency WHERE base_currency = %s AND target_currency = %s", (base_currency, target_currency))
+                exchange_rate = cursor.fetchone()[0]
+
+                converted_amount = amount * exchange_rate
+
+                return render_template('calculated.html', username=username, amount=amount, base_currency=base_currency, target_currency=target_currency, converted_amount=converted_amount)
+            else:
+                return render_template('transaction_notfound.html',username=username)
     else:
         return render_template('calc_exchange.html')
 

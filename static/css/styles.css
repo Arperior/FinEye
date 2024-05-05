@@ -178,6 +178,20 @@ body {
     z-index: -1;
     opacity: 0.5;
   }
+  .conversion-details {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.conversion-details p {
+    margin: 5px 0;
+}
+
+.conversion-details strong {
+    color: #007bff; /* Blue color for the strong text */
+}
   /*Pre Login*/
 
   #prelog {

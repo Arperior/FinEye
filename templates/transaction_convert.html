@@ -1,19 +1,12 @@
 {% extends "index.html" %}
 {% block content %}
 <section id="postlog">
-<h1>! Find out your Converted Prices !</h1>
+<h1>** Enter Details **</h1>
 <div class="container">
     <h1>Conversion</h1>
-    <form action="/exchange" method="post">
-        <label for="amount">Amount</label>
-        <input type="number" id="amount" name="amount" required>
-    
-        <label for="base_currency">Base Currency</label>
-        <select id="base_currency" name="base_currency" size="4" required>
-            {% for currency in currencies %}
-            <option value="{{ currency[0] }}">{{ currency[0] }}</option>
-            {% endfor %}
-        </select>
+    <form action="/exchange_trans" method="post">
+        <label for="tid">Transaction Id</label>
+       <input type="number" id="tid" name="tid" required>
     
         <label for="target_currency">Target Currency</label>
         <select id="target_currency" name="target_currency" size="4" required>
